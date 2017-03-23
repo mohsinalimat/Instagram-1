@@ -11,10 +11,15 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
+enum AuthError: Error {
+    case custom(String)
+    case firebaseError(Error?)
+}
+
 protocol AuthServiceProtocol {
     func isUserLoggedIn() -> Bool
-    func login(email: String, password: String, completion: @escaping (_ error: Error?) -> Void)
-    func register(name: String, email: String, password: String, profileImageData: Data, completion: @escaping (_ error: Error?) -> Void)
+    func login(email: String, password: String, completion: @escaping (_ error: AuthError?) -> Void)
+    func register(name: String, email: String, password: String, profileImageData: Data, completion: @escaping (_ error: AuthError?) -> Void)
 }
 
 struct AuthService: AuthServiceProtocol {
@@ -34,26 +39,28 @@ struct AuthService: AuthServiceProtocol {
         return UserDefaults.standard.bool(forKey: isLoggedInKey)
     }
     
-    func login(email: String, password: String, completion: @escaping (_ error: Error?) -> Void) {
+    func login(email: String, password: String, completion: @escaping (_ error: AuthError?) -> Void) {
         auth?.signIn(withEmail: email, password: password) { user, error in
             guard error == nil else {
-                completion(error)
+                completion(AuthError.firebaseError(error))
                 return
             }
             
             UserDefaults.standard.set(true, forKey: self.isLoggedInKey)
+            completion(nil)
         }
     }
     
-    func register(name: String, email: String, password: String, profileImageData: Data, completion: @escaping (_ error: Error?) -> Void) {
+    func register(name: String, email: String, password: String, profileImageData: Data, completion: @escaping (_ error: AuthError?) -> Void) {
         auth?.createUser(withEmail: email, password: password) { user, error in
             guard error == nil else {
-                completion(error)
+                completion(AuthError.firebaseError(error))
                 return
             }
             
             // FIXME: Return a gereic error here.
             guard let user = user else {
+                completion(AuthError.custom("An unexpect error ocurred, please try again."))
                 return
             }
             
