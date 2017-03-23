@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import FirebaseAuth
-import FirebaseDatabase
-import FirebaseStorage
+import RxSwift
+import RxCocoa
 
 class RegisterViewController: UIViewController {
     
@@ -19,126 +18,41 @@ class RegisterViewController: UIViewController {
     @IBOutlet fileprivate weak var emailTextField: UITextField!
     @IBOutlet fileprivate weak var passwordTextField: UITextField!
     @IBOutlet fileprivate weak var confirmPasswordTextField: UITextField!
-    
     @IBOutlet fileprivate weak var activityIndicator: UIActivityIndicatorView!
     
-    fileprivate var didPickImage = false
-    
-    fileprivate var errorMessage: String? {
-        didSet {
-            if let errorMessage = errorMessage {
-                displayAlert(title: "Error on registration", message: errorMessage)
-            }
-        }
-    }
+    fileprivate var viewModel = RegisterViewModel(authService: AuthService())
+    fileprivate var disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProfileImageView()
         setKeyboardDismissable()
+        bindViewModel()
     }
     
-    private func profileImageDataToUpload() -> Data? {
-        if let image = profileImageView.image,
-            let data = UIImageJPEGRepresentation(image, 0.3) {
-            return data
-        }
-        return nil
+    private func bindViewModel() {
+        viewModel.errorMessage.asObservable().subscribe(onNext: { [unowned self] value in
+            if let errorMessage = value {
+                self.displayAlert(title: "Error on registration", message: errorMessage)
+            }
+        }).addDisposableTo(disposeBag)
+        
+        viewModel.successfullyRegistred.asObservable().subscribe(onNext: { [unowned self] value in
+            if value {
+                self.performSegue(withIdentifier: R.segue.registerViewController.userDidRegistred, sender: nil)
+            }
+        }).addDisposableTo(disposeBag)
+        
+        viewModel.isLoading.asObservable().bindTo(activityIndicator.rx.isAnimating).addDisposableTo(disposeBag)
+        nameTextField.rx.text.bindTo(viewModel.name).addDisposableTo(disposeBag)
+        emailTextField.rx.text.bindTo(viewModel.email).addDisposableTo(disposeBag)
+        passwordTextField.rx.text.bindTo(viewModel.password).addDisposableTo(disposeBag)
+        confirmPasswordTextField.rx.text.bindTo(viewModel.confirmPassword).addDisposableTo(disposeBag)
     }
     
     // MARK: - Actions
     @IBAction fileprivate func registetButtonTapped(_ sender: UIButton) {
-        performRegistration()
-    }
-    
-    fileprivate func performRegistration() {
-        guard let name = nameTextField.text,
-            let email = emailTextField.text,
-            let password = passwordTextField.text,
-            let confirmPassword = confirmPasswordTextField.text else {
-                errorMessage = "Some unexpected error ocurred, please try again."
-                return
-        }
-        
-        guard didPickImage else {
-            errorMessage = "Please, you must pick an image, just tap the avatar image in the screen."
-            return
-        }
-        
-        guard !name.isEmpty && !email.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
-            errorMessage = "Make sure all the fields were typed."
-            return
-        }
-        
-        guard password == confirmPassword else {
-            errorMessage = "Make sure that your passwords matches."
-            return
-        }
-        
-        guard Validator.isEmailValid(email: email) else {
-            errorMessage = "Make sure that the email informed is a valid email."
-            return
-        }
-        
-        activityIndicator.startAnimating()
-        
-        let auth = FIRAuth.auth()
-        
-        auth?.createUser(withEmail: email, password: password) { [unowned self] user, error in
-            
-            defer {
-                self.activityIndicator.stopAnimating()
-            }
-            
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                return
-            }
-            
-            guard let user = user else {
-                self.errorMessage = "Some unexpected error ocurred, please try again."
-                return
-            }
-            
-            guard let data = self.profileImageDataToUpload() else {
-                return
-            }
-            
-            let imageName = UUID().uuidString + ".jpg"
-            
-            let storage = FIRStorage.storage()
-            storage.reference()
-                .child("users")
-                .child(user.uid)
-                .child(imageName)
-                .put(data, metadata: nil) { metadata, error in
-                    guard let url = metadata?.downloadURL() else {
-                        return
-                    }
-                    
-                    let values = ["profilePictureURL": url.absoluteString]
-                    
-                    let database = FIRDatabase.database()
-                    database.reference()
-                        .child("users")
-                        .child(user.uid)
-                        .updateChildValues(values)
-                }
-            
-            let values = [
-                "name": name,
-                "email": email
-            ]
-            
-            let database = FIRDatabase.database()
-            database.reference()
-                .child("users")
-                .child(user.uid)
-                .updateChildValues(values)
-            
-            UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
-            self.performSegue(withIdentifier: "userDidRegistred", sender: nil)
-        }
+        viewModel.performRegister()
     }
     
     @objc
@@ -169,7 +83,7 @@ extension RegisterViewController: UITextFieldDelegate {
         if textField.returnKeyType == .next {
             (view.viewWithTag(textField.tag + 1) as? UITextField)?.becomeFirstResponder()
         } else if textField.returnKeyType == .join {
-            performRegistration()
+            viewModel.performRegister()
         }
         return true
     }
@@ -185,8 +99,8 @@ extension RegisterViewController: UINavigationControllerDelegate, UIImagePickerC
         } else if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             pickedImage = originalImage
         }
-        if pickedImage != nil {
-            didPickImage = true
+        if let pickedImage = pickedImage {
+            viewModel.didPick(image: pickedImage)
         }
         profileImageView.image = pickedImage
         picker.dismiss(animated: true)

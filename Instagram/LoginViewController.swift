@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import FirebaseAuth
+import RxSwift
+import RxCocoa
 
 class LoginViewController: UIViewController {
     
@@ -16,73 +17,48 @@ class LoginViewController: UIViewController {
     @IBOutlet fileprivate weak var passwordTextField: UITextField!
     @IBOutlet fileprivate weak var activityIndicator: UIActivityIndicatorView!
 
-    fileprivate var errorMessage: String? {
-        didSet {
-            if let errorMessage = errorMessage {
-                displayAlert(title: "Error on login", message: errorMessage)
-            }
-        }
-    }
+    fileprivate let viewModel = LoginViewModel(authService: AuthService())
+    fileprivate let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setKeyboardDismissable()
         
-        perform(#selector(checkIfUserIsLoggedIn), with: nil, afterDelay: 0)
+        setKeyboardDismissable()
+        bindViewModel()
     }
     
-    @objc
-    fileprivate func checkIfUserIsLoggedIn() {
-        if UserDefaults.standard.bool(forKey: "isUserLoggedIn") {
-            performSegue(withIdentifier: "userDidLogin", sender: nil)
-        }
+    fileprivate func bindViewModel() {
+        viewModel.errorMessage.asObservable().subscribe(onNext: { [unowned self] message in
+            if let message = message {
+                self.displayAlert(title: "Error on login", message: message)
+            }
+        }).addDisposableTo(disposeBag)
+        
+        viewModel.successfullyLoggedIn.asObservable().subscribe(onNext: { [unowned self] value in
+            if value {
+                self.performSegue(withIdentifier: R.segue.loginViewController.userDidLogin, sender: nil)
+            }
+        }).addDisposableTo(disposeBag)
+        
+        viewModel.isLoading.asObservable().subscribe(onNext: { [unowned self] value in
+            if value {
+                self.activityIndicator.startAnimating()
+            } else {
+                self.activityIndicator.stopAnimating()
+            }
+        }).addDisposableTo(disposeBag)
+        
+        emailTextField.rx.text.bindTo(viewModel.email).addDisposableTo(disposeBag)
+        passwordTextField.rx.text.bindTo(viewModel.password).addDisposableTo(disposeBag)
+//        activityIndicator.rx.isAnimating.bind(to: viewModel.isLoading).addDisposableTo(disposeBag)
     }
     
     // MARK: - Actions
     @IBAction fileprivate func loginButtonTapped(_ sender: UIButton) {
-        performLogin()
+        viewModel.performLogin()
     }
     
     @IBAction fileprivate func unwingToLogin(segue: UIStoryboardSegue) {}
-    
-    fileprivate func performLogin() {
-    
-        guard let email = emailTextField.text,
-            let password = passwordTextField.text else {
-                errorMessage = "Some unexpected error ocurred, please try again."
-                return
-        }
-    
-        guard Validator.isEmailValid(email: email) else {
-            errorMessage = "Make sure that the email informed is a valid email."
-            return
-        }
-        
-        activityIndicator.startAnimating()
-        
-        let auth = FIRAuth.auth()
-        auth?.signIn(withEmail: email, password: password) { user, error in
-            
-            defer {
-                self.activityIndicator.stopAnimating()
-            }
-            
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                return
-            }
-            
-            guard user != nil else {
-                self.errorMessage = "Some unexpected error ocurred, please try again."
-                return
-            }
-            
-            UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
-            
-            self.performSegue(withIdentifier: "userDidLogin", sender: nil)
-        }
-        
-    }
     
 }
 
@@ -104,7 +80,7 @@ extension LoginViewController: UITextFieldDelegate {
         if textField.returnKeyType == .next {
             (view.viewWithTag(textField.tag + 1) as? UITextField)?.becomeFirstResponder()
         } else if textField.returnKeyType == .go {
-            performLogin()
+            viewModel.performLogin()
         }
         return true
     }
