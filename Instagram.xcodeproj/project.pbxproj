@@ -93,10 +93,10 @@
 		1886FD941E836B4800247583 /* SupportFiles */ = {
 			isa = PBXGroup;
 			children = (
-				18D734001E836ACA00ED3833 /* GoogleService-Info.plist */,
 				18C8BB821E8345EF0066C75B /* Assets.xcassets */,
-				18C8BB841E8345EF0066C75B /* LaunchScreen.storyboard */,
+				18D734001E836ACA00ED3833 /* GoogleService-Info.plist */,
 				18C8BB871E8345EF0066C75B /* Info.plist */,
+				18C8BB841E8345EF0066C75B /* LaunchScreen.storyboard */,
 			);
 			name = SupportFiles;
 			sourceTree = "<group>";
@@ -115,7 +115,7 @@
 			children = (
 				18B2632E1E83D9DD00426FD8 /* AuthService.swift */,
 			);
-			name = Services;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		18B263311E83E57800426FD8 /* LoginViewController */ = {
@@ -124,7 +124,7 @@
 				18D733F91E83585500ED3833 /* LoginViewController.swift */,
 				18B2632C1E83D9AA00426FD8 /* LoginViewModel.swift */,
 			);
-			name = LoginViewController;
+			path = LoginViewController;
 			sourceTree = "<group>";
 		};
 		18B263321E83E59200426FD8 /* RegisterViewController */ = {
@@ -133,7 +133,7 @@
 				18D733FB1E8363AB00ED3833 /* RegisterViewController.swift */,
 				18B263331E83E59E00426FD8 /* RegisterViewModel.swift */,
 			);
-			name = RegisterViewController;
+			path = RegisterViewController;
 			sourceTree = "<group>";
 		};
 		18C8BB6F1E8345EF0066C75B = {
@@ -180,7 +180,7 @@
 				18C8BB911E834A6E0066C75B /* PostCollectionViewCell.swift */,
 				18C8BB921E834A6E0066C75B /* PostCollectionViewCell.xib */,
 			);
-			name = PostCollectionViewCell;
+			path = PostCollectionViewCell;
 			sourceTree = "<group>";
 		};
 		18D733FF1E83649200ED3833 /* Extensions */ = {
@@ -189,7 +189,7 @@
 				18C8BB961E834ED30066C75B /* UIView.swift */,
 				18D733FD1E83642600ED3833 /* UIViewController.swift */,
 			);
-			name = Extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		4397E514CC94CA44C396C565 /* Pods */ = {
