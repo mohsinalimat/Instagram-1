@@ -29,7 +29,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         setupLikeImageView()
     }
     
-    func setup(with post: String) {}
+    func setup(with post: Post) {}
 
     // MARK: - Actions
     @IBAction fileprivate func likeButtonTapped(_ sender: UIButton) {

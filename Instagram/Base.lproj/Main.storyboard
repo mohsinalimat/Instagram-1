@@ -415,7 +415,7 @@
                     <connections>
                         <segue destination="MrB-n4-LsW" kind="relationship" relationship="viewControllers" id="T8D-Ii-CPZ"/>
                         <segue destination="ByY-Tl-6OT" kind="relationship" relationship="viewControllers" id="Cbg-TT-al8"/>
-                        <segue destination="fmU-l7-4c2" kind="relationship" relationship="viewControllers" id="nHh-wH-RMC"/>
+                        <segue destination="jtv-LA-JMw" kind="relationship" relationship="viewControllers" id="nHh-wH-RMC"/>
                         <segue destination="rBi-hZ-oUV" kind="relationship" relationship="viewControllers" id="iXo-Pq-xgf"/>
                         <segue destination="VOf-Gc-1Rn" kind="relationship" relationship="viewControllers" id="ZqP-Qk-1F9"/>
                     </connections>
@@ -508,10 +508,10 @@
             </objects>
             <point key="canvasLocation" x="977" y="1445"/>
         </scene>
-        <!--View Controller-->
+        <!--Share To-->
         <scene sceneID="ImC-mu-YOZ">
             <objects>
-                <viewController id="fmU-l7-4c2" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="fmU-l7-4c2" customClass="SendPostViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="DzJ-ct-Wi9"/>
                         <viewControllerLayoutGuide type="bottom" id="mvm-mv-Bm8"/>
@@ -519,15 +519,91 @@
                     <view key="view" contentMode="scaleToFill" id="ih0-La-3N0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f4D-X4-bCW">
+                                <rect key="frame" x="12" y="76" width="351" height="77"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AzK-pf-nQU">
+                                        <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="64" id="5yi-2j-ADf"/>
+                                            <constraint firstAttribute="height" constant="64" id="qQb-mC-H5G"/>
+                                        </constraints>
+                                    </imageView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Write a caption..." translatesAutoresizingMaskIntoConstraints="NO" id="5iu-kc-c3v">
+                                        <rect key="frame" x="72" y="0.0" width="279" height="64"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="64" id="igS-dQ-6PD"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jO6-dP-eEb" userLabel="Separator">
+                                        <rect key="frame" x="0.0" y="76" width="351" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="Ojl-Qz-Z3y"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="jO6-dP-eEb" firstAttribute="leading" secondItem="f4D-X4-bCW" secondAttribute="leading" id="2Y8-Qj-Qfq"/>
+                                    <constraint firstItem="5iu-kc-c3v" firstAttribute="leading" secondItem="AzK-pf-nQU" secondAttribute="trailing" constant="8" id="Hb2-1t-8Gb"/>
+                                    <constraint firstAttribute="trailing" secondItem="5iu-kc-c3v" secondAttribute="trailing" id="KZ4-R6-t4P"/>
+                                    <constraint firstItem="AzK-pf-nQU" firstAttribute="centerY" secondItem="5iu-kc-c3v" secondAttribute="centerY" id="Kqq-Bl-1fs"/>
+                                    <constraint firstItem="AzK-pf-nQU" firstAttribute="leading" secondItem="f4D-X4-bCW" secondAttribute="leading" id="MLc-2F-S1s"/>
+                                    <constraint firstAttribute="trailing" secondItem="jO6-dP-eEb" secondAttribute="trailing" id="WhG-ep-S3a"/>
+                                    <constraint firstAttribute="bottom" secondItem="jO6-dP-eEb" secondAttribute="bottom" id="gJ5-wf-8Ba"/>
+                                    <constraint firstItem="5iu-kc-c3v" firstAttribute="top" secondItem="f4D-X4-bCW" secondAttribute="top" id="i2P-eZ-EZp"/>
+                                    <constraint firstItem="jO6-dP-eEb" firstAttribute="top" secondItem="5iu-kc-c3v" secondAttribute="bottom" constant="12" id="ztf-fq-BZm"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="f4D-X4-bCW" firstAttribute="leading" secondItem="ih0-La-3N0" secondAttribute="leading" constant="12" id="a5c-WX-jlr"/>
+                            <constraint firstAttribute="trailing" secondItem="f4D-X4-bCW" secondAttribute="trailing" constant="12" id="esP-CQ-LpE"/>
+                            <constraint firstItem="f4D-X4-bCW" firstAttribute="top" secondItem="DzJ-ct-Wi9" secondAttribute="bottom" constant="12" id="xGo-Xw-6y0"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="ic_plus_fill" id="8K4-Eu-ZVA">
-                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
-                    </tabBarItem>
+                    <navigationItem key="navigationItem" title="Share To" id="Z3r-qv-t43">
+                        <barButtonItem key="rightBarButtonItem" title="Share" id="o6F-d8-oKW">
+                            <connections>
+                                <action selector="shareButtonTapped:" destination="fmU-l7-4c2" id="LEQ-0J-VTV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="captionTextView" destination="5iu-kc-c3v" id="eUO-ZT-x9Z"/>
+                        <outlet property="selectedImageView" destination="AzK-pf-nQU" id="SFx-uI-Nxu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GhE-xN-fAT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="977" y="65"/>
+            <point key="canvasLocation" x="1916" y="64.31784107946028"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="v7D-TY-Z5c">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jtv-LA-JMw" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="ic_plus_fill" id="8K4-Eu-ZVA">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="f5S-bF-hrK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="fmU-l7-4c2" kind="relationship" relationship="rootViewController" id="7ms-ph-41A"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0i4-Bp-UrN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="976.79999999999995" y="64.31784107946028"/>
         </scene>
     </scenes>
     <resources>
