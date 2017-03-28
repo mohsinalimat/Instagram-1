@@ -17,14 +17,18 @@ enum AuthError: Error {
 }
 
 protocol AuthServiceProtocol {
-    func isUserLoggedIn() -> Bool
     func login(email: String, password: String, completion: @escaping (_ error: AuthError?) -> Void)
     func register(name: String, email: String, password: String, profileImageData: Data, completion: @escaping (_ error: AuthError?) -> Void)
+    
+    static func currentUserId() -> String!
+    static func isUserLoggedIn() -> Bool
 }
 
 struct AuthService: AuthServiceProtocol {
     
-    let isLoggedInKey = "isLoggedInKey"
+    static fileprivate let currentUserIdKey = "currentUserIdKey"
+    static fileprivate let isLoggedInKey = "isLoggedInKey"
+    
     let auth: FIRAuth?
     let database: FIRDatabase
     let storage: FIRStorage
@@ -35,8 +39,12 @@ struct AuthService: AuthServiceProtocol {
         storage = FIRStorage.storage()
     }
 
-    func isUserLoggedIn() -> Bool {
-        return UserDefaults.standard.bool(forKey: isLoggedInKey)
+    static func currentUserId() -> String! {
+        return UserDefaults.standard.string(forKey: currentUserIdKey)
+    }
+    
+    static func isUserLoggedIn() -> Bool {
+        return UserDefaults.standard.bool(forKey: AuthService.isLoggedInKey)
     }
     
     func login(email: String, password: String, completion: @escaping (_ error: AuthError?) -> Void) {
@@ -46,7 +54,13 @@ struct AuthService: AuthServiceProtocol {
                 return
             }
             
-            UserDefaults.standard.set(true, forKey: self.isLoggedInKey)
+            guard let user = user else {
+                completion(AuthError.custom("An unexpect error ocurred, please try again."))
+                return
+            }
+            
+            UserDefaults.standard.set(user.uid, forKey: AuthService.currentUserIdKey)
+            UserDefaults.standard.set(true, forKey: AuthService.isLoggedInKey)
             completion(nil)
         }
     }
@@ -64,7 +78,7 @@ struct AuthService: AuthServiceProtocol {
                 return
             }
             
-            let imageName = UUID().uuidString + ".jpg"
+            let imageName = "profilePicture.jpg"
             
             // FIXME: Refactor uploading to a separate service.
             self.storage.reference()
@@ -76,7 +90,7 @@ struct AuthService: AuthServiceProtocol {
                         return
                     }
                     
-                    let values = ["profilePictureURL": url.absoluteString]
+                    let values = ["profileImageURL": url.absoluteString]
                     
                     self.database.reference()
                         .child("users")
@@ -89,14 +103,10 @@ struct AuthService: AuthServiceProtocol {
                 "email": email
             ]
             
-            // FIXME: Refactor database to a separate service.
-            let database = FIRDatabase.database()
-            database.reference()
-                .child("users")
-                .child(user.uid)
-                .updateChildValues(values)
+            Router.user(id: user.uid).reference.updateChildValues(values)
             
-            UserDefaults.standard.set(true, forKey: self.isLoggedInKey)
+            UserDefaults.standard.set(user.uid, forKey: AuthService.currentUserIdKey)
+            UserDefaults.standard.set(true, forKey: AuthService.isLoggedInKey)
             completion(nil)
         }
     }

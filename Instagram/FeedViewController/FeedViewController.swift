@@ -7,25 +7,30 @@
 //
 
 import UIKit
+import RxSwift
 
 class FeedViewController: UIViewController {
 
     // MARK: - Outlets
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
     
-    fileprivate let reuseIdentifier = "PostCollectionViewCell"
+    fileprivate let viewModel = FeedViewModel(postService: PostService())
+    fileprivate let disposeBag = DisposeBag()
     
-    fileprivate var posts: [String] = [] {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+    fileprivate let reuseIdentifier = "PostCollectionViewCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupNavigationItem()
         setupCollectionView()
+        bindViewModel()
+    }
+    
+    fileprivate func bindViewModel() {
+        viewModel.posts.asObservable().subscribe(onNext: { [weak self] _ in
+            self?.collectionView.reloadData()
+        }).addDisposableTo(disposeBag)
     }
 
 }
@@ -52,7 +57,7 @@ extension FeedViewController {
 // MARK: - UICollectionViewDataSource
 extension FeedViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return viewModel.posts.value.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -60,8 +65,8 @@ extension FeedViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-//        let post = posts[indexPath.row]
-//        cell.setup(with: post)
+        let post = viewModel.posts.value[indexPath.row]
+        cell.setup(with: post)
 
         return cell
     }

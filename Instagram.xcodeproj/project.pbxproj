@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		181D8E341E89D50C00045431 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D8E331E89D50C00045431 /* Post.swift */; };
+		181D8E371E89D52A00045431 /* JSONDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D8E361E89D52A00045431 /* JSONDecodable.swift */; };
+		181D8E3A1E89DA9800045431 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D8E391E89DA9800045431 /* FeedViewModel.swift */; };
+		181D8E3C1E89DAD300045431 /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D8E3B1E89DAD300045431 /* PostService.swift */; };
+		181D8E3E1E89DC6700045431 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D8E3D1E89DC6700045431 /* Router.swift */; };
+		181D8E421E89E25800045431 /* SendPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D8E401E89E25800045431 /* SendPostViewController.swift */; };
+		181D8E451E89E77A00045431 /* SendPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D8E441E89E77A00045431 /* SendPostViewModel.swift */; };
 		1886FD961E83764B00247583 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1886FD951E83764B00247583 /* Validator.swift */; };
 		1886FD991E837CF000247583 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1886FD981E837CF000247583 /* R.generated.swift */; };
 		18B263251E83D7FE00426FD8 /* InstagramTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B263241E83D7FE00426FD8 /* InstagramTests.swift */; };
@@ -40,6 +47,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		181D8E331E89D50C00045431 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		181D8E361E89D52A00045431 /* JSONDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDecodable.swift; sourceTree = "<group>"; };
+		181D8E391E89DA9800045431 /* FeedViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
+		181D8E3B1E89DAD300045431 /* PostService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
+		181D8E3D1E89DC6700045431 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		181D8E401E89E25800045431 /* SendPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendPostViewController.swift; sourceTree = "<group>"; };
+		181D8E441E89E77A00045431 /* SendPostViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendPostViewModel.swift; sourceTree = "<group>"; };
 		1886FD951E83764B00247583 /* Validator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		1886FD981E837CF000247583 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		18B263221E83D7FE00426FD8 /* InstagramTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InstagramTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +104,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		181D8E351E89D51900045431 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				181D8E331E89D50C00045431 /* Post.swift */,
+				181D8E361E89D52A00045431 /* JSONDecodable.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		181D8E381E89DA8B00045431 /* FeedViewController */ = {
+			isa = PBXGroup;
+			children = (
+				18C8BB8F1E83499D0066C75B /* FeedViewController.swift */,
+				181D8E391E89DA9800045431 /* FeedViewModel.swift */,
+			);
+			path = FeedViewController;
+			sourceTree = "<group>";
+		};
+		181D8E3F1E89E23500045431 /* SendPostViewController */ = {
+			isa = PBXGroup;
+			children = (
+				181D8E401E89E25800045431 /* SendPostViewController.swift */,
+				181D8E441E89E77A00045431 /* SendPostViewModel.swift */,
+			);
+			path = SendPostViewController;
+			sourceTree = "<group>";
+		};
 		1886FD941E836B4800247583 /* SupportFiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +155,8 @@
 			isa = PBXGroup;
 			children = (
 				18B2632E1E83D9DD00426FD8 /* AuthService.swift */,
+				181D8E3B1E89DAD300045431 /* PostService.swift */,
+				181D8E3D1E89DC6700045431 /* Router.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -159,9 +202,10 @@
 		18C8BB7A1E8345EF0066C75B /* Instagram */ = {
 			isa = PBXGroup;
 			children = (
+				181D8E3F1E89E23500045431 /* SendPostViewController */,
 				18C8BB7B1E8345EF0066C75B /* AppDelegate.swift */,
 				18D733FF1E83649200ED3833 /* Extensions */,
-				18C8BB8F1E83499D0066C75B /* FeedViewController.swift */,
+				181D8E381E89DA8B00045431 /* FeedViewController */,
 				18B263311E83E57800426FD8 /* LoginViewController */,
 				18C8BB7F1E8345EF0066C75B /* Main.storyboard */,
 				18C8BB951E834EB60066C75B /* PostCollectionViewCell */,
@@ -170,6 +214,7 @@
 				18B263301E83E57000426FD8 /* Services */,
 				1886FD941E836B4800247583 /* SupportFiles */,
 				1886FD951E83764B00247583 /* Validator.swift */,
+				181D8E351E89D51900045431 /* Model */,
 			);
 			path = Instagram;
 			sourceTree = "<group>";
@@ -442,11 +487,18 @@
 				18D733FA1E83585500ED3833 /* LoginViewController.swift in Sources */,
 				1886FD961E83764B00247583 /* Validator.swift in Sources */,
 				1886FD991E837CF000247583 /* R.generated.swift in Sources */,
+				181D8E451E89E77A00045431 /* SendPostViewModel.swift in Sources */,
+				181D8E3C1E89DAD300045431 /* PostService.swift in Sources */,
 				18C8BB931E834A6E0066C75B /* PostCollectionViewCell.swift in Sources */,
+				181D8E341E89D50C00045431 /* Post.swift in Sources */,
+				181D8E3A1E89DA9800045431 /* FeedViewModel.swift in Sources */,
 				18D733FE1E83642600ED3833 /* UIViewController.swift in Sources */,
+				181D8E421E89E25800045431 /* SendPostViewController.swift in Sources */,
 				18B2632F1E83D9DD00426FD8 /* AuthService.swift in Sources */,
 				18D733FC1E8363AB00ED3833 /* RegisterViewController.swift in Sources */,
+				181D8E3E1E89DC6700045431 /* Router.swift in Sources */,
 				18B263341E83E59E00426FD8 /* RegisterViewModel.swift in Sources */,
+				181D8E371E89D52A00045431 /* JSONDecodable.swift in Sources */,
 				18C8BB7C1E8345EF0066C75B /* AppDelegate.swift in Sources */,
 				18C8BB901E83499D0066C75B /* FeedViewController.swift in Sources */,
 				18B2632D1E83D9AA00426FD8 /* LoginViewModel.swift in Sources */,
