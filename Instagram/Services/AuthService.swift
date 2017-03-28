@@ -92,10 +92,7 @@ struct AuthService: AuthServiceProtocol {
                     
                     let values = ["profileImageURL": url.absoluteString]
                     
-                    self.database.reference()
-                        .child("users")
-                        .child(user.uid)
-                        .updateChildValues(values)
+                    Router.user(id: user.uid).reference.updateChildValues(values)
             }
             
             let values = [
